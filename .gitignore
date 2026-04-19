@@ -1,0 +1,33 @@
+# secrets
+.env
+.env.local
+*.secret
+credentials/
+*.json.key
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# streamlit
+.streamlit/secrets.toml
+
+# バックテスト結果・生成データ（デプロイに不要、サイズも大きい）
+data/candidates.json
+data/technical_recommendations.json
+data/fundamental_recommendations.json
+data/primary_recommendations.json
+data/second_opinion.json
+data/backtest_*.json
+data/backtest_*.log
+data/*.log
+
+# os
+.DS_Store
+
+# ide
+.vscode/
+.idea/
