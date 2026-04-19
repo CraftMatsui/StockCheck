@@ -35,6 +35,16 @@ def _load_lines() -> dict[str, dict]:
     return {str(r["code"]): r for r in sheets.list_lines()}
 
 
+@st.cache_data(ttl=300)
+def _load_holdings() -> list[dict]:
+    return sheets.list_holdings()
+
+
+@st.cache_data(ttl=300)
+def _load_watchlist() -> list[dict]:
+    return sheets.list_watchlist()
+
+
 @st.cache_data(ttl=3600)
 def _fetch_topix_regime() -> dict:
     """TOPIX の現在値・200日移動平均を取得し、相場環境を判定
@@ -75,7 +85,7 @@ def _add_to_watchlist_dialog(code: str, name: str, current_price) -> None:
     if price_value:
         st.caption(f"現在値: ¥{price_value:,.0f}")
 
-    existing = [w for w in sheets.list_watchlist() if str(w.get("code")) == str(code)]
+    existing = [w for w in _load_watchlist() if str(w.get("code")) == str(code)]
     if existing:
         st.warning("⚠ この銘柄はすでに監視リストに登録されています。")
         return
@@ -104,7 +114,7 @@ def _add_to_holdings_dialog(code: str, name: str, current_price) -> None:
         st.caption(f"現在値: ¥{price_value:,.0f}")
 
     # 重複チェック
-    existing = [h for h in sheets.list_holdings() if str(h.get("code")) == str(code)]
+    existing = [h for h in _load_holdings() if str(h.get("code")) == str(code)]
     if existing:
         st.warning(
             f"⚠ この銘柄はすでに保有登録されています（{existing[0].get('shares')}株）。"
@@ -161,7 +171,7 @@ with tab_hold:
                         st.error(f"エラー: {e}")
 
     st.subheader("保有銘柄")
-    holdings = sheets.list_holdings()
+    holdings = _load_holdings()
 
     if not holdings:
         st.info("まだ保有銘柄が登録されていません。上の「保有銘柄を追加」から登録してください。")
@@ -256,7 +266,7 @@ with tab_watch:
                         st.error(f"エラー: {e}")
 
     st.subheader("監視中の銘柄")
-    watchlist = sheets.list_watchlist()
+    watchlist = _load_watchlist()
 
     if not watchlist:
         st.info(
