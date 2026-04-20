@@ -61,9 +61,10 @@ def get_google_credentials_info() -> dict:
     Local: ファイルパス GOOGLE_CREDENTIALS_PATH から
     """
     if GOOGLE_CREDENTIALS_JSON:
-        if isinstance(GOOGLE_CREDENTIALS_JSON, dict):
-            return dict(GOOGLE_CREDENTIALS_JSON)
-        return json.loads(GOOGLE_CREDENTIALS_JSON)
+        if isinstance(GOOGLE_CREDENTIALS_JSON, str):
+            return json.loads(GOOGLE_CREDENTIALS_JSON)
+        # Streamlit Secrets は dict ではなく AttrDict 系なので dict() で展開
+        return dict(GOOGLE_CREDENTIALS_JSON)
     if GOOGLE_CREDENTIALS_PATH:
         with open(GOOGLE_CREDENTIALS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
