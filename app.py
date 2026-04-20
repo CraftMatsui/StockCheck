@@ -92,7 +92,7 @@ def _add_to_watchlist_dialog(code: str, name: str, current_price) -> None:
 
     with st.form(f"add_watch_{code}"):
         note = st.text_input("メモ（任意）", placeholder="例: 決算発表後に検討、〇〇円まで下がったら買う")
-        submitted = st.form_submit_button("👁️ 監視に追加", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("👁️ 監視に追加", type="primary", width="stretch")
         if submitted:
             try:
                 sheets.add_watchlist(code, name, note)
@@ -130,7 +130,7 @@ def _add_to_holdings_dialog(code: str, name: str, current_price) -> None:
             value=price_value,
             help="空欄なら現在値が入ります。実際の買値を入れてください。",
         )
-        submitted = st.form_submit_button("✓ 追加する", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("✓ 追加する", type="primary", width="stretch")
         if submitted:
             try:
                 sheets.add_holding(code, name, int(shares), float(avg_price))
@@ -198,7 +198,7 @@ with tab_hold:
         st.dataframe(
             display,
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
             column_config={
                 "取得単価": st.column_config.NumberColumn(format="¥%.0f"),
                 "現在値": st.column_config.NumberColumn(format="¥%.0f"),
@@ -292,7 +292,7 @@ with tab_watch:
         st.dataframe(
             wdisplay,
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
             column_config={
                 "現在値": st.column_config.NumberColumn(format="¥%.0f"),
                 "利確ライン": st.column_config.NumberColumn(format="¥%.0f"),
@@ -403,7 +403,7 @@ with tab_reco:
                 if btn_hold_col.button(
                     "➕ 保有に追加",
                     key=f"add_hold_reco_{r.get('code')}",
-                    use_container_width=True,
+                    width="stretch",
                 ):
                     _add_to_holdings_dialog(
                         str(r.get("code")),
@@ -413,7 +413,7 @@ with tab_reco:
                 if btn_watch_col.button(
                     "👁️ 監視に追加",
                     key=f"add_watch_reco_{r.get('code')}",
-                    use_container_width=True,
+                    width="stretch",
                 ):
                     _add_to_watchlist_dialog(
                         str(r.get("code")),
