@@ -5,7 +5,15 @@ import pandas as pd
 from lib import jquants, sheets
 
 st.set_page_config(page_title="StockCheck", page_icon="📈", layout="wide")
-st.title("📈 StockCheck")
+
+_col_title, _col_refresh = st.columns([4, 1])
+with _col_title:
+    st.title("📈 StockCheck")
+with _col_refresh:
+    st.write("")  # 縦位置調整
+    if st.button("🔄 更新", width="stretch", help="Google Sheets と現在値を再取得"):
+        st.cache_data.clear()
+        st.rerun()
 
 
 @st.cache_data(ttl=300)
